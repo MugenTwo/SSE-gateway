@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Mock SSE servers for testing the SSE Gateway",
   "scripts": {
-    "start-wallet": "node wallet-service.js",
-    "start-game": "node game-service.js",
-    "start-user": "node user-service.js",
-    "start-all": "npm run start-wallet & npm run start-game & npm run start-user"
+    "start-account": "node account-service.js",
+    "start-payment": "node payment-service.js",
+    "start-customer": "node customer-service.js",
+    "start-all": "npm run start-account & npm run start-payment & npm run start-customer"
   },
   "dependencies": {
     "express": "^4.21.2"

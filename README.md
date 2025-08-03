@@ -39,9 +39,9 @@ npm run start-all
 ```
 
 This starts:
-- Wallet Service on port 8081
-- Game Service on port 8082  
-- User Service on port 8083
+- Account Service on port 8081
+- Payment Service on port 8082  
+- Customer Service on port 8083
 
 #### 2. Start the Gateway Service
 
@@ -89,12 +89,38 @@ Example endpoint configuration:
 ```yaml
 sse-gateway:
   endpoints:
-    - name: wallet-transactions
-      url: http://localhost:8081/wallet/transaction-events
+    - name: account-low-balance
+      url: http://localhost:8081/accounts/low-balance-alerts
       filter-params:
-        - userId
+        - customerId
+        - currency
+    - name: account-transactions
+      url: http://localhost:8081/accounts/transaction-events
+      filter-params:
+        - customerId
         - currency
         - minAmount
+    - name: payment-transactions
+      url: http://localhost:8082/transactions/sse
+      filter-params:
+        - customerId
+        - currency
+        - limit
+    - name: high-value-transactions
+      url: http://localhost:8082/transactions/high-value
+      filter-params:
+        - minAmount
+        - currency
+    - name: customer-activity
+      url: http://localhost:8083/customers/activity
+      filter-params:
+        - customerId
+        - activityType
+    - name: security-alerts
+      url: http://localhost:8083/customers/security-alerts
+      filter-params:
+        - severity
+        - customerId
 ```
 
 ### Security Configuration
@@ -105,10 +131,14 @@ When `sse-gateway.security: true`, the secured endpoints require JWT authenticat
 sse-gateway:
   security: true
   secured-endpoints:
-    - name: user-profile-events
-      url: http://localhost:8083/users/profile-events
+    - name: customer-profile-events
+      url: http://localhost:8083/customers/profile-events
       filter-params:
         - profileType
+    - name: account-private-events
+      url: http://localhost:8081/accounts/private-events
+      filter-params:
+        - currency
 
 spring:
   security:
@@ -159,12 +189,12 @@ management:
 
 Public access:
 ```bash
-curl "http://localhost:8080/public/events?sources=wallet-transactions,wallet-zero-balance&userId=user123"
+curl "http://localhost:8080/public/events?sources=account-transactions,payment-transactions&customerId=cust123&currency=USD"
 ```
 
 Secured access (when security enabled):
 ```bash
-curl -H "Authorization: Bearer <JWT_TOKEN>" "http://localhost:8080/events?sources=user-profile-events"
+curl -H "Authorization: Bearer <JWT_TOKEN>" "http://localhost:8080/events?sources=customer-profile-events,account-private-events&currency=USD"
 ```
 
 ## Environment Profiles

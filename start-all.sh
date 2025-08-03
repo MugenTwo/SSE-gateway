@@ -42,15 +42,15 @@ check_port 8083
 echo "Starting Mock SSE Servers:"
 
 echo "  → Account Service (port 8081)"
-(cd mock-sse-servers && node wallet-service.js) &
+(cd mock-sse-servers && node account-service.js) &
 WALLET_PID=$!
 
 echo "  → Payment Processing Service (port 8082)" 
-(cd mock-sse-servers && node game-service.js) &
+(cd mock-sse-servers && node payment-service.js) &
 GAME_PID=$!
 
 echo "  → Customer Service (port 8083)"
-(cd mock-sse-servers && node user-service.js) &
+(cd mock-sse-servers && node customer-service.js) &
 USER_PID=$!
 
 sleep 3
