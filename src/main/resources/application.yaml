@@ -1,0 +1,61 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: sse-gateway-services
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+sse-gateway:
+  debug: false
+  security: false
+  endpoints:
+    - name: account-low-balance
+      url: http://localhost:8081/accounts/low-balance-alerts
+      filter-params:
+        - customerId
+        - currency
+    - name: account-transactions
+      url: http://localhost:8081/accounts/transaction-events
+      filter-params:
+        - customerId
+        - currency
+        - minAmount
+    - name: payment-transactions
+      url: http://localhost:8082/transactions/sse
+      filter-params:
+        - customerId
+        - currency
+        - limit
+    - name: high-value-transactions
+      url: http://localhost:8082/transactions/high-value
+      filter-params:
+        - minAmount
+        - currency
+    - name: customer-activity
+      url: http://localhost:8083/customers/activity
+      filter-params:
+        - customerId
+        - activityType
+    - name: security-alerts
+      url: http://localhost:8083/customers/security-alerts
+      filter-params:
+        - severity
+        - customerId
+  secured-endpoints:
+    - name: customer-profile-events
+      url: http://localhost:8083/customers/profile-events
+      filter-params:
+        - profileType
+    - name: account-private-events
+      url: http://localhost:8081/accounts/private-events
+      filter-params:
+        - currency

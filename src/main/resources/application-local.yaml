@@ -1,0 +1,47 @@
+spring:
+  r2dbc:
+    url: r2dbc:h2:mem:///test?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+
+otel:
+  sdk:
+    disabled: true
+
+logging:
+  level:
+    root: INFO
+    com.mugentwo.ssegateway: DEBUG
+
+sse-gateway:
+  endpoints:
+    - name: wallet-zero-balance
+      url: http://localhost:8081/wallet/zero-balance-events
+      filter-params:
+        - userId
+        - currency
+    - name: wallet-transactions
+      url: http://localhost:8081/wallet/transaction-events
+      filter-params:
+        - userId
+        - currency
+        - minAmount
+    - name: game-plays
+      url: http://localhost:8082/plays/sse
+      filter-params:
+        - userId
+        - currency
+        - limit
+    - name: big-wins
+      url: http://localhost:8082/plays/big-wins
+      filter-params:
+        - minWin
+        - currency
+    - name: user-activity
+      url: http://localhost:8083/users/activity
+      filter-params:
+        - userId
+        - activityType
+    - name: security-alerts
+      url: http://localhost:8083/users/security-alerts
+      filter-params:
+        - severity
+        - userId

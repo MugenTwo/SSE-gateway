@@ -1,0 +1,14 @@
+{
+  "name": "mock-sse-servers",
+  "version": "1.0.0",
+  "description": "Mock SSE servers for testing the SSE Gateway",
+  "scripts": {
+    "start-wallet": "node wallet-service.js",
+    "start-game": "node game-service.js",
+    "start-user": "node user-service.js",
+    "start-all": "npm run start-wallet & npm run start-game & npm run start-user"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
